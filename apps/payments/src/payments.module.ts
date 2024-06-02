@@ -23,10 +23,10 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       {
         name: NOTIFICATION_SERIVCE,
         useFactory: (configService: ConfigService) => ({
-          transport: Transport.TCP,
+          transport: Transport.RMQ,
           options: {
-            host: configService.get<string>('NOTIFICATION_HOST'),
-            port: configService.get<number>('NOTIFICATION_PORT'),
+            urls: [configService.getOrThrow<string>('RABBITMQ_URI')],
+            queue: 'notifications',
           },
         }),
         inject: [ConfigService],
